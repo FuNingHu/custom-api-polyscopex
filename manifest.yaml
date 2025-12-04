@@ -1,0 +1,11 @@
+metadata:
+  vendorID: "funh"
+  urcapID: "custom-api-polyscopex"
+  vendorName: "funh"
+  urcapName: "Custom API X"
+  version: 1.0.0
+artifacts:
+  webArchives:
+  - id: "custom-api-polyscopex-frontend"
+    folder: "custom-api-polyscopex-frontend"
+  

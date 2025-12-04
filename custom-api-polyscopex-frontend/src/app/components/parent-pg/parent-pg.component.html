@@ -1,0 +1,18 @@
+@if (contributedNode) {
+<div class="inline-component">
+    <ur-button (handleClick)="onImplementChildButtonClick()" type="cta" [disabled]="hasChildNode" icon="manual"
+        iconAlign="left" [active]="false">Implement Child</ur-button>
+    <ur-radio-group [value]="this.contributedNode.parameters.color_child" [disabled]="false" [labelPosition]="'after'"
+        [buttonPosition]="'inline'" (radioChange)="onSetChildColor($event.value)">
+        <div>Set child color: </div>
+        <ur-radio-button *ngFor="let color of colors" [value]="color" [invalid]="false" [hover]="false">
+            {{ color }}
+        </ur-radio-button>
+    </ur-radio-group>
+    <div>
+        Parent's color is: {{ this.contributedNode.parameters.color_parent }}
+    </div>
+    <div class="color-square" [style.background-color]="this.contributedNode.parameters.color_parent">
+    </div>
+</div>
+}

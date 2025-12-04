@@ -1,0 +1,26 @@
+@if (contributedNode) {
+    <div class="inline-component">
+        <ur-radio-group
+            [value]="this.contributedNode.parameters.color_parent"
+            [disabled]="false"
+            [labelPosition]="'after'"
+            [buttonPosition]="'inline'"
+            (radioChange)="onSetParentColor($event.value)">
+            <div>Set Parent Color: </div>
+            <ur-radio-button
+              *ngFor="let color of colors"
+              [value]="color"
+              [invalid]="false"
+              [hover]="false"
+            >{{ color }}</ur-radio-button>
+        </ur-radio-group>
+        
+        <div>
+            Current node color is: {{ this.contributedNode.parameters.color_mine }}
+        </div>
+        <div 
+            class="color-square"
+            [style.background-color]="this.contributedNode.parameters.color_mine">
+        </div>
+    </div>
+}

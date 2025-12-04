@@ -1,6 +1,4 @@
-# Angular contribution
-
-This project is a template example of a URCap containing a Web frontend and a Docker backend
+This repo implements a similar concept to CustomAPI in PolyScope X context, to permit inserting child program node from parent node, and to change child node value from parent node. With power of PolyScope X SDK 0.18.90, it found also possible to do in a reversed vay (child changes parent's value)!
 
 ## Build and Deploy Sample
 

@@ -12,7 +12,7 @@
       "componentTagName": "funh-custom-api-polyscopex-parent-pg"
     },
     {
-      "excludeFromToolbox": false,
+      "excludeFromToolbox": true,
       "translationPath": "assets/i18n/",
       "iconURI": "assets/icons/custom-api-polyscopex.svg",
       "behaviorURI": "child-pg.worker.js",

@@ -1,5 +1,11 @@
 This repo implements a similar concept to CustomAPI in PolyScope X context, to permit inserting child program node from parent node, and to change child node value from parent node. With power of PolyScope X SDK 0.18.90, it found also possible to do in a reversed vay (child changes parent's value)!
 
+Initial submit date: 2025-Dec-04
+Last modified date: 2025-Dec-04
+
+Contact: funh@universal-robots.com
+
+
 ## Build and Deploy Sample
 
 To build and deploy this sample, use the commands below. A rebuild of the project is required to see any changes made 

@@ -5,7 +5,6 @@ Last modified date: 2025-Dec-04
 
 Contact: funh@universal-robots.com
 
-
 ## Build and Deploy Sample
 
 To build and deploy this sample, use the commands below. A rebuild of the project is required to see any changes made 

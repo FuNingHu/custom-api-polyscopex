@@ -31,10 +31,10 @@ export class ParentPgComponent implements OnChanges, ProgramPresenter {
     }
 
     /**
-     * 根据用户选择的语言，返回应该使用的语言
-     * - 如果选择的是英语（en, en-US, en-GB等），返回 'en'
-     * - 如果选择的是中文简体（zh, zh-CN, zh-Hans等），返回 'zh-CN'
-     * - 如果选择的是其他语言，返回 'en'（使用英语作为后备）
+     * Returns the language to use based on user's language selection
+     * - If English (en, en-US, en-GB, etc.) is selected, returns 'en'
+     * - If Simplified Chinese (zh, zh-CN, zh-Hans, etc.) is selected, returns 'zh-CN'
+     * - If any other language is selected, returns 'en' (using English as fallback)
      */
     private getLanguageToUse(language: string): string {
         if (!language) {
@@ -43,18 +43,18 @@ export class ParentPgComponent implements OnChanges, ProgramPresenter {
 
         const lang = language.toLowerCase();
 
-        // 支持英语（包括 en, en-US, en-GB 等变体）
+        // Support English (including variants like en, en-US, en-GB)
         if (lang === 'en' || lang === 'en-us' || lang === 'en-gb') {
             return 'en';
         }
 
-        // 支持中文简体（包括 zh, zh-CN, zh-Hans 等变体）
-        // 统一使用 'zh-CN' 作为中文简体的语言代码
+        // Support Simplified Chinese (including variants like zh, zh-CN, zh-Hans)
+        // Use 'zh-CN' as the unified language code for Simplified Chinese
         if (lang === 'zh' || lang === 'zh-cn' || lang === 'zh-hans' || lang.startsWith('zh-')) {
             return 'zh-CN';
         }
 
-        // 其他语言都使用英语作为后备
+        // Use English as fallback for all other languages
         return 'en';
     }
 
@@ -68,7 +68,7 @@ export class ParentPgComponent implements OnChanges, ProgramPresenter {
             if (changes?.robotSettings?.isFirstChange()) {
                 this.translateService.setDefaultLang('en');
                 
-                // 先加载英语翻译，确保默认语言可用
+                // Load English translation first to ensure default language is available
                 this.translateService
                     .use(changes?.robotSettings?.currentValue?.language)
                     .pipe(first())
@@ -92,18 +92,18 @@ export class ParentPgComponent implements OnChanges, ProgramPresenter {
         console.log('onRemoveChildButtonClick');
 
         try {
-            // 获取父节点ID
+            // Get parent node ID
             let parentNodeId = this.presenterAPI.selectedNodeId;
             
-            // 获取子树上下文，查找子节点
+            // Get subtree context to find child nodes
             const subtreeContext = await this.presenterAPI.programTreeService.getSubtreeContextFromProgramNodeById(parentNodeId);
             
-            // 查找子节点
+            // Find child node
             let childNodeId: string | null = null;
             for await (const child of subtreeContext.children) {
                 if (child.node?.type === 'funh-custom-api-polyscopex-child-pg' && child.id) {
                     childNodeId = child.id;
-                    break; // 只有一个子节点，找到后立即退出
+                    break; // Only one child node, exit immediately after finding it
                 }
             }
 
@@ -114,23 +114,23 @@ export class ParentPgComponent implements OnChanges, ProgramPresenter {
 
             console.log(`Found child node ${childNodeId}, removing...`);
 
-            // 创建 RemoveNode 对象
+            // Create RemoveNode object
             const removeNode: RemoveNode = {
                 nodeId: childNodeId,
                 changeSelection: false
             };
 
-            // 删除子节点
+            // Remove child node
             await this.presenterAPI.programTreeService.removeChildNode(removeNode);
             console.log(`Child node ${childNodeId} removed successfully`);
 
-            // 等待一小段时间，确保删除操作完成
+            // Wait a short time to ensure the removal operation is complete
             await new Promise(resolve => setTimeout(resolve, 200));
 
-            // 更新子节点状态
+            // Update child node status
             await this.checkChildNodes();
 
-            // 触发变更检测
+            // Trigger change detection
             this.cd.detectChanges();
         } catch (error) {
             console.error('Error removing child node:', error);
@@ -143,7 +143,7 @@ export class ParentPgComponent implements OnChanges, ProgramPresenter {
             const treeservice = this.presenterAPI.programTreeService;
             const pivotNodeId = this.presenterAPI.selectedNodeId;
 
-            // 创建 child-pg 节点
+            // Create child-pg node
             const childNode: ChildPgNode = {
                 type: 'funh-custom-api-polyscopex-child-pg',
                 version: '1.0.0',
@@ -156,7 +156,7 @@ export class ParentPgComponent implements OnChanges, ProgramPresenter {
                 }
             };
 
-            // 创建 AddNode 对象并插入节点
+            // Create AddNode object and insert node
             const addNode: AddNode = {
                 changeSelection: false,
                 insertionRelativeToPivotNode: InsertionEnum.INTO_FIRST,
@@ -167,10 +167,10 @@ export class ParentPgComponent implements OnChanges, ProgramPresenter {
             treeservice.addNode(addNode);
             console.log('Child node added successfully');
             
-            // 检查子节点状态
+            // Check child node status
             await this.checkChildNodes();
             
-            // 触发变更检测
+            // Trigger change detection
             this.cd.detectChanges();
         } catch (error) {
             console.error('Error adding child node:', error);
@@ -181,23 +181,23 @@ export class ParentPgComponent implements OnChanges, ProgramPresenter {
         console.log('onSetChildColor called with color:', color);
 
         try {
-            // 保存当前节点 ID，以防 contributedNode 被替换
+            // Save current node ID to prevent contributedNode from being replaced
             let currentNodeId = this.presenterAPI.selectedNodeId;
             
 
-            // 更新父节点的 color_child 参数
+            // Update parent node's color_child parameter
             this.contributedNode.parameters.color_child = color;
             console.log('Updated parent node color_child to:', color);
             await this.saveNode();
             
             const subtreeContext = await this.presenterAPI.programTreeService.getSubtreeContextFromProgramNodeById(currentNodeId);
             
-            // 查找并更新子节点（只有一个子节点）
+            // Find and update child node (only one child node)
             let childCount = 0;
             for await (const child of subtreeContext.children) {
                 if (child.node?.type === 'funh-custom-api-polyscopex-child-pg' && child.id && child.node.parameters) {
                     child.node.parameters.color_mine = color;
-                    // 创建 SubtreeNode 对象
+                    // Create SubtreeNode object
                     const subtreenode: SubtreeNode = {
                         id: child.id,
                         node: child.node
@@ -205,7 +205,7 @@ export class ParentPgComponent implements OnChanges, ProgramPresenter {
                     await this.presenterAPI.programTreeService.updateSubTreeNode(subtreenode);
                     childCount = 1;
                     console.log(`Successfully updated child node ${child.id} color_mine to ${color}`);
-                    break; // 只有一个子节点，找到后立即退出
+                    break; // Only one child node, exit immediately after finding it
                 }
             }
             
@@ -215,11 +215,11 @@ export class ParentPgComponent implements OnChanges, ProgramPresenter {
                 console.log(`Updated ${childCount} child node(s)`);
             }
             
-            // 触发变更检测
+            // Trigger change detection
             this.cd.detectChanges();
         } catch (error) {
             console.error('Error in onSetChildColor:', error);
-            // 即使出错也要触发变更检测
+            // Trigger change detection even if there's an error
             this.cd.detectChanges();
         }
     }
@@ -227,12 +227,12 @@ export class ParentPgComponent implements OnChanges, ProgramPresenter {
     async checkChildNodes() {
 
         try {
-            // 尝试从 contributedNode 获取节点ID，如果不行则使用 selectedNodeId
-            // 但需要验证 selectedNodeId 对应的节点是否是父节点
+            // Try to get node ID from contributedNode, if not available use selectedNodeId
+            // But need to verify if the node corresponding to selectedNodeId is a parent node
             let currentNodeId = this.presenterAPI.selectedNodeId;
             const subtreeContext = await this.presenterAPI.programTreeService.getSubtreeContextFromProgramNodeById(currentNodeId);
             
-            // 检查是否有子节点
+            // Check if there are child nodes
             let hasChild = false;
             for await (const child of subtreeContext.children) {
                 if (child.node?.type === 'funh-custom-api-polyscopex-child-pg') {

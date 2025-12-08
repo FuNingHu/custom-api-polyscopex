@@ -30,10 +30,10 @@ export class ChildPgComponent implements OnChanges, ProgramPresenter {
     }
 
     /**
-     * 根据用户选择的语言，返回应该使用的语言
-     * - 如果选择的是英语（en, en-US, en-GB等），返回 'en'
-     * - 如果选择的是中文简体（zh, zh-CN, zh-Hans等），返回 'zh-CN'
-     * - 如果选择的是其他语言，返回 'en'（使用英语作为后备）
+     * Returns the language to use based on user's language selection
+     * - If English (en, en-US, en-GB, etc.) is selected, returns 'en'
+     * - If Simplified Chinese (zh, zh-CN, zh-Hans, etc.) is selected, returns 'zh-CN'
+     * - If any other language is selected, returns 'en' (using English as fallback)
      */
     private getLanguageToUse(language: string): string {
         if (!language) {
@@ -42,18 +42,18 @@ export class ChildPgComponent implements OnChanges, ProgramPresenter {
 
         const lang = language.toLowerCase();
 
-        // 支持英语（包括 en, en-US, en-GB 等变体）
+        // Support English (including variants like en, en-US, en-GB)
         if (lang === 'en' || lang === 'en-us' || lang === 'en-gb') {
             return 'en';
         }
 
-        // 支持中文简体（包括 zh, zh-CN, zh-Hans 等变体）
-        // 统一使用 'zh-CN' 作为中文简体的语言代码
+        // Support Simplified Chinese (including variants like zh, zh-CN, zh-Hans)
+        // Use 'zh-CN' as the unified language code for Simplified Chinese
         if (lang === 'zh' || lang === 'zh-cn' || lang === 'zh-hans' || lang.startsWith('zh-')) {
             return 'zh-CN';
         }
 
-        // 其他语言都使用英语作为后备
+        // Use English as fallback for all other languages
         return 'en';
     }
 
@@ -67,7 +67,7 @@ export class ChildPgComponent implements OnChanges, ProgramPresenter {
             if (changes?.robotSettings?.isFirstChange()) {
                 this.translateService.setDefaultLang('en');
                 
-                // 先加载英语翻译，确保默认语言可用
+                // Load English translation first to ensure default language is available
                 this.translateService
                     .use(changes?.robotSettings?.currentValue?.language)
                     .pipe(first())
@@ -86,16 +86,16 @@ export class ChildPgComponent implements OnChanges, ProgramPresenter {
         console.log('onSetParentColor called with color:', color);
 
         try {
-            // 保存当前节点 ID
+            // Save current node ID
             let currentNodeId = this.presenterAPI.selectedNodeId;
 
-            // 更新子节点的 color_parent 参数
+            // Update child node's color_parent parameter
             this.contributedNode.parameters.color_parent = color;
             console.log('Updated child node color_parent to:', color);
             await this.saveNode();
 
-            // 查找父节点并更新父节点的 color_parent 参数
-            // 通过实例查找父节点（最可靠的方式）
+            // Find parent node and update parent node's color_parent parameter
+            // Find parent node through instances (most reliable way)
             let parentCount = 0;
             try {
                 // await this.con
@@ -103,7 +103,7 @@ export class ChildPgComponent implements OnChanges, ProgramPresenter {
                 const parentInstance = instances.find(inst => inst.node.type === 'funh-custom-api-polyscopex-parent-pg');
                 
                 if (parentInstance) {
-                    // 获取父节点并更新//retrive the parent node and update,
+                    // Retrieve the parent node and update
                     const parentNode = await this.presenterAPI.programTreeService.getProgramNodeById(parentInstance.id) as ParentPgNode;
                     if (parentNode && parentNode.parameters && parentNode.type === 'funh-custom-api-polyscopex-parent-pg') {
                         parentNode.parameters.color_parent = color;
@@ -129,7 +129,7 @@ export class ChildPgComponent implements OnChanges, ProgramPresenter {
             }
             
 
-            // 触发变更检测
+            // Trigger change detection
             this.cd.detectChanges();
         } catch (error) {
             console.error('Error in onSetParentColor:', error);

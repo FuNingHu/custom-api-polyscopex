@@ -29,25 +29,52 @@ export class ChildPgComponent implements OnChanges, ProgramPresenter {
     ) {
     }
 
+    /**
+     * 根据用户选择的语言，返回应该使用的语言
+     * - 如果选择的是英语（en, en-US, en-GB等），返回 'en'
+     * - 如果选择的是中文简体（zh, zh-CN, zh-Hans等），返回 'zh-CN'
+     * - 如果选择的是其他语言，返回 'en'（使用英语作为后备）
+     */
+    private getLanguageToUse(language: string): string {
+        if (!language) {
+            return 'en';
+        }
+
+        const lang = language.toLowerCase();
+
+        // 支持英语（包括 en, en-US, en-GB 等变体）
+        if (lang === 'en' || lang === 'en-us' || lang === 'en-gb') {
+            return 'en';
+        }
+
+        // 支持中文简体（包括 zh, zh-CN, zh-Hans 等变体）
+        // 统一使用 'zh-CN' 作为中文简体的语言代码
+        if (lang === 'zh' || lang === 'zh-cn' || lang === 'zh-hans' || lang.startsWith('zh-')) {
+            return 'zh-CN';
+        }
+
+        // 其他语言都使用英语作为后备
+        return 'en';
+    }
+
     ngOnChanges(changes: SimpleChanges): void {
         if (changes?.robotSettings) {
             if (!changes?.robotSettings?.currentValue) {
                 return;
             }
 
+            const languageToUse = this.getLanguageToUse(changes?.robotSettings?.currentValue?.language);
             if (changes?.robotSettings?.isFirstChange()) {
-                if (changes?.robotSettings?.currentValue) {
-                    this.translateService.use(changes?.robotSettings?.currentValue?.language);
-                }
                 this.translateService.setDefaultLang('en');
-            }
-
-            this.translateService
-                .use(changes?.robotSettings?.currentValue?.language)
-                .pipe(first())
-                .subscribe(() => {
-                    this.cd.detectChanges();
-                });
+                
+                // 先加载英语翻译，确保默认语言可用
+                this.translateService
+                    .use(changes?.robotSettings?.currentValue?.language)
+                    .pipe(first())
+                    .subscribe(() =>{
+                       this.cd.detectChanges();
+                    });
+            } 
             
         }
         if (changes?.contributedNode) {

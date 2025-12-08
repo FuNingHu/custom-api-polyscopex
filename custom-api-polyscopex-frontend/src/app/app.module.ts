@@ -32,7 +32,7 @@ export const httpLoaderFactory = (http: HttpBackend) =>
       FormsModule,
       TranslateModule.forRoot({
         loader: { provide: TranslateLoader, useFactory: httpLoaderFactory, deps: [HttpBackend] },
-        useDefaultLang: false,
+        useDefaultLang: true, // 启用默认语言回退，当找不到翻译时使用默认语言（英语）
       })
     ],
     providers: [],

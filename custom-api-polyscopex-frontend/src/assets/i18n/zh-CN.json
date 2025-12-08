@@ -1,0 +1,11 @@
+{
+  "program": {
+    "tree": {
+      "nodes": {
+        "funh-custom-api-polyscopex-parent-pg": "父程序节点",
+        "funh-custom-api-polyscopex-child-pg": "子程序节点"
+      }
+    }
+  }
+}
+

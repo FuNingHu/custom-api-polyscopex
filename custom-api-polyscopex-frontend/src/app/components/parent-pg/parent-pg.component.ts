@@ -67,17 +67,17 @@ export class ParentPgComponent implements OnChanges, ProgramPresenter {
             const languageToUse = this.getLanguageToUse(changes?.robotSettings?.currentValue?.language);
             if (changes?.robotSettings?.isFirstChange()) {
                 this.translateService.setDefaultLang('en');
-                
+
                 // Load English translation first to ensure default language is available
-                this.translateService
-                    .use(changes?.robotSettings?.currentValue?.language)
-                    .pipe(first())
-                    .subscribe(() => {
-                        this.cd.detectChanges();
-                    });
-            } 
-            
+            this.translateService
+                .use(changes?.robotSettings?.currentValue?.language)
+                .pipe(first())
+                .subscribe(() => {
+                    this.cd.detectChanges();
+                });
         }
+            
+    }
 
         if (changes?.contributedNode) {
             console.log('contributedNode type:', this.contributedNode.type);

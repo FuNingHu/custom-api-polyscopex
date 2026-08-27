@@ -5,6 +5,14 @@ Last modified date: 2026-Aug-27
 
 Contact: funh@universal-robots.com
 
+## Feedback
+
+Questions, discussions, and feedback are welcome on the Universal Robots Forum thread:
+
+[CustomAPI in polyscopex](https://forum.universal-robots.com/t/customapi-in-polyscopex/41926)
+
+Please leave your comments under that post so others can follow along.
+
 ## Build and Deploy Sample
 
 To build and deploy this sample, use the commands below. A rebuild of the project is required to see any changes made 
